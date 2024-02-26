@@ -37,6 +37,12 @@ const userSchema = new mongoose.Schema(
       type: mongoose.Schema.ObjectId,
       ref: "Equb",
     },
+    joinedEqubs: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "Equb",
+      },
+    ],
   },
   {
     timestamps: true,
