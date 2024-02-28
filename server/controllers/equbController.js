@@ -20,9 +20,161 @@ exports.createEqub = asyncHandler(async (req, res) => {
   res.status(201).json(equb);
 });
 
+// @desc    Send join request to Equb
+// @route   POST /api/equbs/:id/sendjoinrequest
+// @access  Private (User)
+exports.sendJoinRequest = asyncHandler(async (req, res) => {
+  const equbId = req.params.id;
+  const userId = req.user._id;
+
+  const equb = await Equb.findById(equbId);
+
+  if (!equb) {
+    return res.status(404).json({ error: "Equb not found" });
+  }
+
+  if (equb.joinRequests.some((request) => request.userId.equals(userId))) {
+    return res
+      .status(400)
+      .json({ error: "You have already sent a join request to this Equb" });
+  }
+
+  equb.joinRequests.push({ userId });
+
+  await equb.save();
+
+  res.status(200).json({ message: "Join request sent successfully" });
+});
+
+// @desc    Get all join requests for Equb
+// @route   GET /api/equbs/:id/joinrequests
+// @access  Private (Manager)
+exports.getAllJoinRequests = asyncHandler(async (req, res) => {
+  const equbId = req.params.id;
+  const userId = req.user._id;
+
+  const equb = await Equb.findById(equbId);
+
+  if (!equb) {
+    return res.status(404).json({ error: "Equb not found" });
+  }
+
+  if (!equb.creator || !equb.creator.equals(userId)) {
+    return res
+      .status(403)
+      .json({ error: "You are not authorized to access these join requests" });
+  }
+
+  const joinRequests = equb.joinRequests;
+
+  res.status(200).json({ joinRequests });
+});
+
+// @desc    Accept a join request for Equb
+// @route   PUT /api/equbs/:equbId/joinrequests/:requestId/accept
+// @access  Private (Manager)
+exports.acceptJoinRequest = asyncHandler(async (req, res) => {
+  const equbId = req.params.equbId;
+  const requestId = req.params.requestId;
+  const userId = req.user._id;
+
+  const equb = await Equb.findById(equbId);
+
+  if (!equb) {
+    return res.status(404).json({ error: "Equb not found" });
+  }
+
+  if (!equb.createdBy || !equb.createdBy.equals(userId)) {
+    return res
+      .status(403)
+      .json({ error: "You are not authorized to accept join requests" });
+  }
+
+  const foundRequest = equb.joinRequests.find((request) =>
+    request._id.equals(requestId)
+  );
+
+  if (!foundRequest) {
+    return res.status(404).json({ error: "No join request found" });
+  }
+
+  const userIdFromRequest = foundRequest.userId;
+
+  const user = await User.findById(userIdFromRequest);
+
+  if (!user) {
+    return res.status(404).json({ error: "User not found" });
+  }
+
+  if (equb.members.includes(user._id)) {
+    return res.status(400).json({ error: "User is already a member" });
+  }
+
+  const updateResult = await Equb.findOneAndUpdate(
+    { _id: equbId },
+    {
+      $push: { members: user._id },
+      $pull: { joinRequests: { _id: requestId } },
+    },
+    { new: true, runValidators: true }
+  );
+
+  if (!updateResult) {
+    return res.status(500).json({ error: "Failed to accept join request" });
+  }
+
+  await User.findOneAndUpdate(
+    { _id: user._id },
+    { $push: { joinedEqubs: equbId } }
+  );
+
+  res.status(200).json({ message: "Join request accepted successfully" });
+});
+
+//@desc    Decline Join Request
+//@route   PUT /api/equb/:equbid/joinrequest/:requestid/decline
+//@access  Private (Manager)
+exports.declineJoinRequest = asyncHandler(async (req, res) => {
+  const equbId = req.params.equbId;
+  const requestId = req.params.requestId;
+  const userId = req.user._id;
+
+  const equb = await Equb.findById(equbId);
+
+  if (!equb) {
+    return res.status(404).json({ error: "Equb not found" });
+  }
+
+  if (!equb.createdBy || !equb.createdBy.equals(userId)) {
+    return res
+      .status(403)
+      .json({ error: "You are not authorized to decline join requests" });
+  }
+
+  const foundRequest = equb.joinRequests.find((request) =>
+    request._id.equals(requestId)
+  );
+
+  if (!foundRequest) {
+    return res.status(400).json({ error: "No join request found" });
+  }
+
+  const updateResult = await Equb.findOneAndUpdate(
+    { _id: equbId },
+    { $pull: { joinRequests: { _id: requestId } } },
+    { new: true, runValidators: true }
+  );
+
+  if (!updateResult) {
+    return res.status(500).json({ error: "Failed to decline join request" });
+  }
+
+  res.status(200).json({ message: "Join request declined successfully" });
+});
+
 //@desc    Add members to the equb
 //@route   PUT /api/equbs/:id/addmember
-//@access  Private (User)
+//@access  Private (Manager)
 exports.addUsersToEqub = asyncHandler(async (req, res) => {
   const { phoneNumbers } = req.body;
   const equbId = req.params.id;
@@ -83,7 +235,7 @@ exports.addUsersToEqub = asyncHandler(async (req, res) => {
 
 //@desc    Remove members from the equb
 //@route   PUT /api/equbs/:id/removemember
-//@access  Private (User)
+//@access  Private (Manager)
 exports.removeUsersFromEqub = asyncHandler(async (req, res) => {
   const { userIds } = req.body;
   const equbId = req.params.id;
@@ -206,7 +358,7 @@ exports.leaveEqub = asyncHandler(async (req, res) => {
 
 //@desc    End an equb
 //@route   PUT /api/equbs/:id/end
-//@access  Private (User)
+//@access  Private (Manager)
 exports.endEqub = asyncHandler(async (req, res) => {
   const equbId = req.params.id;
   const userId = req.user._id;
@@ -240,7 +392,7 @@ exports.endEqub = asyncHandler(async (req, res) => {
 
 // @desc    Update Equb
 // @route   PUT /api/equbs/:id
-// @access  Private
+// @access  Private (Manager)
 exports.updateEqub = asyncHandler(async (req, res) => {
   let equb = await Equb.findById(req.params.id);
   if (!equb) {
@@ -267,7 +419,7 @@ exports.updateEqub = asyncHandler(async (req, res) => {
 
 // @desc    Regenerate Equb Code
 // @route   PUT /api/equbs/:id/regenerate-code
-// @access  Private (User)
+// @access  Private (Manager)
 exports.regenerateCode = asyncHandler(async (req, res) => {
   const equb = await Equb.findById(req.params.id);
   if (!equb) {
@@ -310,7 +462,7 @@ exports.getEqub = asyncHandler(async (req, res, next) => {
 
 // @desc    Get Nearby Equbs in a specific area
 // @route   GET /api/equbs/:latitude/:longitude/nearby
-// @access  Private
+// @access  Private (User)
 exports.getNearbyEqubs = asyncHandler(async (req, res) => {
   const { latitude, longitude } = req.params;
   const userCoordinates = [parseFloat(latitude), parseFloat(longitude)];
@@ -335,11 +487,12 @@ exports.getNearbyEqubs = asyncHandler(async (req, res) => {
 // @access   Private (Admin)
 exports.deleteEqub = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
-  let equb = await Equb.findById(id);
 
+  const equb = await Equb.findById(id);
   if (!equb) {
     return res.status(404).json({ message: "Equb not found" });
   }
+
   const user = await User.findById(req.user._id);
   if (
     !user ||
@@ -349,7 +502,19 @@ exports.deleteEqub = asyncHandler(async (req, res, next) => {
       .status(401)
       .json({ error: "Not authorized to delete this equb" });
   }
-  equb = await Equb.findOneAndDelete(id);
+
+  await User.updateMany(
+    {},
+    {
+      $pull: {
+        createdEqub: equb._id,
+        joinedEqubs: equb._id,
+      },
+    }
+  );
+
+  await Equb.deleteOne({ _id: id });
+
   res.status(200).json({ message: "Equb deleted successfully" });
 });
 

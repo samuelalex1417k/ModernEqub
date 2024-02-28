@@ -57,6 +57,14 @@ const equbSchema = new mongoose.Schema(
         ref: "User",
       },
     ],
+    joinRequests: [
+      {
+        userId: {
+          type: mongoose.Schema.ObjectId,
+          ref: "User",
+        },
+      },
+    ],
     isAuthorized: {
       type: Boolean,
       default: false,
