@@ -43,6 +43,12 @@ const userSchema = new mongoose.Schema(
         ref: "Equb",
       },
     ],
+    payments: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "Payment",
+      },
+    ],
   },
   {
     timestamps: true,
