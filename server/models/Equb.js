@@ -65,6 +65,12 @@ const equbSchema = new mongoose.Schema(
         },
       },
     ],
+    payments: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "Payment",
+      },
+    ],
     isAuthorized: {
       type: Boolean,
       default: false,
