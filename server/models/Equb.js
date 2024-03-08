@@ -71,6 +71,10 @@ const equbSchema = new mongoose.Schema(
         ref: "Payment",
       },
     ],
+    current_round: {
+      type: Number,
+      default: 1,
+    },
     isAuthorized: {
       type: Boolean,
       default: false,

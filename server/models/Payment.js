@@ -5,6 +5,9 @@ const paymentSchema = new mongoose.Schema({
     type: mongoose.Schema.ObjectId,
     ref: "Equb",
   },
+  roundNumber: {
+    type: Number,
+  },
   user: {
     type: mongoose.Schema.ObjectId,
     ref: "User",
