@@ -18,8 +18,19 @@ exports.initiatePayment = asyncHandler(async (req, res, next) => {
     return res.status(404).json({ message: "User or EQUB not found" });
   }
 
+  const currentRoundNumber = equb.current_round;
+
+  const existingPayment = await Payment.findOne({
+    user: user._id,
+    equb: equb._id,
+    roundNumber: currentRoundNumber,
+  });
+
+  if (existingPayment) {
+    return res.status(400).json({ message: "You already paid for this round" });
+  }
+
   const TEXT_REF = `tx-${equb._id}-${Date.now()}`;
-  console.log(TEXT_REF);
 
   const data = {
     amount: equb.amount,
@@ -29,6 +40,7 @@ exports.initiatePayment = asyncHandler(async (req, res, next) => {
     meta: {
       equbId: req.params.equbId,
       userId: req.user._id,
+      round: currentRoundNumber,
     },
   };
 
@@ -48,10 +60,12 @@ exports.verifyPayment = asyncHandler(async (req, res, next) => {
   );
 
   const { amount, currency, method, tx_ref, status } = response.data.data;
+  const { userId, equbId, round } = response.data.data.meta;
 
   const payment = new Payment({
-    equb: response.data.data.meta.equbId,
-    user: response.data.data.meta.userId,
+    equb: equbId,
+    user: userId,
+    roundNumber: round,
     amount: Number(amount),
     currency: currency,
     paymentMethod: method,
@@ -67,4 +81,42 @@ exports.verifyPayment = asyncHandler(async (req, res, next) => {
   await Equb.findByIdAndUpdate(equbId, { $push: { payments: payment._id } });
 
   res.status(200).json({ message: "Payment was successfully verified" });
+});
+
+// @desc     Get all transactions for a specific Equb and round number
+// @route    GET /api/payment/:equbId/:roundNumber/transactions
+// @access   Private (User)
+exports.getTransactionsByEqubAndRound = asyncHandler(async (req, res, next) => {
+  const equbId = req.params.equbId;
+  const roundNumber = req.params.roundNumber;
+
+  const transactions = await Payment.find({
+    equb: equbId,
+    roundNumber: roundNumber,
+  });
+
+  if (!transactions) {
+    return res
+      .status(404)
+      .json({ message: "No transactions found for this equb and round" });
+  }
+
+  res.json(transactions);
+});
+
+// @desc     Get all transactions made by a specific user
+// @route    GET /api/payment/:userId/transactions
+// @access   Private (User)
+exports.getUserTransactions = asyncHandler(async (req, res, next) => {
+  const userId = req.params.userId;
+
+  const transactions = await Payment.find({ user: userId });
+
+  if (!transactions) {
+    return res
+      .status(404)
+      .json({ message: "No transactions found for this user" });
+  }
+
+  res.json(transactions);
 });
