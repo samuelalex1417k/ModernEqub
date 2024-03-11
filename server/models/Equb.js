@@ -42,6 +42,7 @@ const equbSchema = new mongoose.Schema(
     },
     max_round: {
       type: Number,
+      default: 1,
     },
     status: {
       type: String,
@@ -71,6 +72,12 @@ const equbSchema = new mongoose.Schema(
         ref: "Payment",
       },
     ],
+    lottery: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "Lottery",
+      },
+    ],
     current_round: {
       type: Number,
       default: 1,
@@ -84,9 +91,7 @@ const equbSchema = new mongoose.Schema(
 );
 
 // Middleware to generate equb_code and max_round
-equbSchema.pre("save", function (next) {
-  this.max_round = this.number_of_participant;
-
+equbSchema.pre("save", async function (next) {
   if (!this.equb_code) {
     const randomDigits = Math.floor(100000 + Math.random() * 900000);
     this.equb_code = `E${randomDigits}`;
