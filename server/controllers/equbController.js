@@ -215,9 +215,16 @@ exports.addUsersToEqub = asyncHandler(async (req, res) => {
 
   const updatedEqub = await Equb.findOneAndUpdate(
     { _id: equbId },
-    { $push: { members: { $each: newUsersToAdd } } },
+    {
+      $push: { members: { $each: newUsersToAdd } },
+    },
     { new: true, runValidators: true }
   );
+
+  // Update max_round after successful member addition
+  await Equb.findByIdAndUpdate(equbId, {
+    $set: { max_round: updatedEqub.members.length },
+  });
 
   await Promise.all(
     newUsersToAdd.map(async (userId) => {
@@ -279,9 +286,16 @@ exports.removeUsersFromEqub = asyncHandler(async (req, res) => {
   // Remove users from equb's members and user's joinedEqubs arrays
   const updatedEqub = await Equb.findOneAndUpdate(
     { _id: equbId },
-    { $pull: { members: { $in: usersToRemove } } },
+    {
+      $pull: { members: { $in: usersToRemove } },
+    },
     { new: true }
   );
+
+  // Update max_round after successful member removal
+  await Equb.findByIdAndUpdate(equbId, {
+    $set: { max_round: updatedEqub.members.length },
+  });
 
   await Promise.all(
     usersToRemove.map(async (userId) => {
