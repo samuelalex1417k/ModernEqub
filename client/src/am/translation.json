@@ -1,0 +1,25 @@
+{
+    "onboarding": {
+      "title1": "ዕቁብ የት መቀላቀል እችላለሁ?",
+      "subtitle1": "ይህን ጥያቄ ጠይቀህ ያውቃሉ?",
+      "title2": "ዕቁብ",
+      "subtitle2": "ለዛ ነው የመጣነው",
+      "title3": "እንኳን ደህና መጡ",
+      "subtitle3": "ጉዞዎን ዛሬ ይጀምሩ እና አሸናፊዎች ይሁኑ።"
+    },
+    "buttons": {
+      "next": "ቀጣይ",
+      "skip": "ዝለል",
+      "done": "ጨርስ",
+      "resend": "ኮድ እንደገና ላክ"
+    },
+    "login": {
+      "title": "ግባ",
+      "phoneNumber": "ስልክ ቁጥር",
+      "password": "የይለፍ ቃል",
+      "loginButton": "ግባ",
+      "signUpLink": "እዚህ ይመዝገቡ",
+      "forgotPasswordLink": "መክፈቻ ቁልፉን ረሳኽው?"
+    }
+  }
+  

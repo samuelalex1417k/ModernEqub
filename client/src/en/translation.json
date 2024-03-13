@@ -1,0 +1,25 @@
+{
+    "onboarding": {
+      "title1": "Where can I join Equbs?",
+      "subtitle1": "Have you ever asked yourself this question?",
+      "title2": "Equb",
+      "subtitle2": "That's why we are here.",
+      "title3": "Welcome",
+      "subtitle3": "Start your journey today and become a winner."
+    },
+    "buttons": {
+      "next": "Next",
+      "skip": "Skip",
+      "done": "Done",
+      "resend": "Resend Code"
+    },
+    "login": {
+      "title": "Login",
+      "phoneNumber": "Phone Number",
+      "password": "Password",
+      "loginButton": "Login",
+      "signUpLink": "Sign Up",
+      "forgotPasswordLink": "Forgot Password?"
+    }
+  }
+  
