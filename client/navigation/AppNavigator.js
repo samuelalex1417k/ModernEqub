@@ -6,9 +6,9 @@ import SignUpScreen from '../screens/SignUpScreen';
 import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
 import OTPInputScreen from '../screens/OTPInputScreen';
 import ResetPasswordScreen from '../screens/ResetPasswordScreen';
-import OnboardingScreen from '../screens/OnboardingScreen';
+import OnboardingScreen from '../screens/onboardingScreen';
 import SplashScreen from '../screens/splashScreen';
-import HomeScreen from '../screens/HomeScreen';
+import HomeScreen from '../screens/homeScreen';
 import LanguageSelectionScreen from '../screens/LanguageSelectionScreen';
 const Stack = createNativeStackNavigator();
 
