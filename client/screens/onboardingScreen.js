@@ -4,9 +4,7 @@ import Onboarding from 'react-native-onboarding-swiper';
 import LottieView from 'lottie-react-native';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useTranslation } from 'react-i18next'; // Import useTranslation hook
-
-const { width, height } = Dimensions.get('window');
+import { useTranslation } from 'react-i18next';
 
 const OnboardingScreen = () => {
   const navigation = useNavigation();

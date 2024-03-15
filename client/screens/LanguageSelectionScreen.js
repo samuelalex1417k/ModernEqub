@@ -15,10 +15,8 @@ const LanguageSelectionScreen = () => {
     // Check if language selection has already been made
     const language = await AsyncStorage.getItem('language');
     if (language) {
-      // Language already selected, navigate to onboarding screen
       navigation.navigate('Onboarding');
     } else {
-      // Language not selected yet
       setLanguageSelected(true);
     }
   };
@@ -26,7 +24,6 @@ const LanguageSelectionScreen = () => {
   const handleLanguageSelection = async (language) => {
     // Save selected language to AsyncStorage
     await AsyncStorage.setItem('language', language);
-    // Navigate to onboarding screen
     navigation.navigate('Onboarding');
   };
 

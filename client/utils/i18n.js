@@ -1,12 +1,12 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector'; // For browser language detection
-import en from '../src/en/translation.json'; // Import English translation
-import am from '../src/am/translation.json'; // Import Amharic translation
+import en from '../locales/en/translation.json';
+import am from '../locales/am/translation.json';
 
 i18n
   .use(initReactI18next)
-  .use(LanguageDetector) // Add language detection
+  .use(LanguageDetector)
   .init({
     resources: {
       en: {
@@ -15,19 +15,18 @@ i18n
       am: {
         translation: am
       }
-      // Add more languages as needed
     },
     lng: 'en', // Fallback language if detection fails
     fallbackLng: 'en',
     detection: {
-      order: ['localStorage', 'navigator'], // Order of language detection methods
-      caches: ['localStorage'], // Cache language detected
+      order: ['localStorage', 'navigator'],
+      caches: ['localStorage'],
     },
     interpolation: {
-      escapeValue: false // react already safeguards against XSS
+      escapeValue: false
     },
     react: {
-      useSuspense: false // Set to true if you want to use Suspense for translations loading
+      useSuspense: false
     }
   });
 

@@ -34,7 +34,7 @@ const SplashScreen = () => {
     <View style={styles.container}>
       {/* Logo */}
       <Image
-        source={require('../assets/logo/logo-png.png')} // Replace './path_to_your_image/logo.png' with the actual path to your logo image
+        source={require('../assets/logo/logo-png.png')}
         style={styles.logo}
       />
     </View>
@@ -49,9 +49,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   logo: {
-    width: 130, // Adjust width according to your design
-    height: 180, // Adjust height according to your design
-    marginBottom: 10, // Adjust spacing between logo and text if needed
+    width: 130,
+    height: 180,
+    marginBottom: 10,
   },
 });
 

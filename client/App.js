@@ -1,17 +1,13 @@
-// App.js
-
-// Import the polyfill at the beginning of the file
-import 'intl-pluralrules'; // Add this line
-
 import React from 'react';
+import 'intl-pluralrules'; 
 import { I18nextProvider } from 'react-i18next';
-import i18n from './utils/i18n'; // Import the i18n instance
-import MainNavigator from './navigation/mainNavigation';
+import i18n from './utils/i18n';
+import AppNavigator from './navigation/AppNavigator';
 
 const App = () => {
   return (
     <I18nextProvider i18n={i18n}>
-      <MainNavigator />
+      <AppNavigator />
     </I18nextProvider>
   );
 };

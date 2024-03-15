@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import PhoneNumberInput from 'react-native-phone-number-input';
-import { Ionicons } from '@expo/vector-icons'; // Import Ionicons from expo vector icons
+import { Ionicons } from '@expo/vector-icons';
 
-const SignUpPage = ({ navigation }) => {
+const SignUpScreen = ({ navigation }) => {
   const [fullName, setFullName] = useState('');
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
@@ -14,30 +14,24 @@ const SignUpPage = ({ navigation }) => {
   const [error, setError] = useState('');
 
   const handleSignUp = () => {
-    // Empty text input validation
     if (!fullName.trim() || !userName.trim() || !password.trim() || !confirmPassword.trim() || !phoneNumber.trim()) {
       setError('All fields are required');
       return;
     }
 
-    // Password mismatch validation
     if (password !== confirmPassword) {
       setError('Passwords do not match');
       return;
     }
 
-    // Reset error message
     setError('');
 
-    // Handle sign up logic here
     console.log('Signing up with:', fullName, userName, password, confirmPassword, phoneNumber);
 
-    // Redirect to home page after successful sign-up
     navigation.navigate('HomePage');
   };
 
   const handleLoginRedirect = () => {
-    // Navigate back to the login page
     navigation.goBack();
   };
 
@@ -77,7 +71,7 @@ const SignUpPage = ({ navigation }) => {
           secureTextEntry={!showPassword}
         />
         <TouchableOpacity onPress={() => setShowPassword(!showPassword)} style={styles.eyeIcon}>
-          <Ionicons name={showPassword ? 'eye-off-outline' : 'eye-outline'} size={24} color="black" />
+          <Ionicons name={showPassword ? 'eye-outline' : 'eye-off-outline'} size={24} color="black" />
         </TouchableOpacity>
       </View>
       <View style={styles.passwordContainer}>
@@ -89,7 +83,7 @@ const SignUpPage = ({ navigation }) => {
           secureTextEntry={!showConfirmPassword}
         />
         <TouchableOpacity onPress={() => setShowConfirmPassword(!showConfirmPassword)} style={styles.eyeIcon}>
-          <Ionicons name={showConfirmPassword ? 'eye-off-outline' : 'eye-outline'} size={24} color="black" />
+          <Ionicons name={showConfirmPassword ? 'eye-outline' : 'eye-off-outline'} size={24} color="black" />
         </TouchableOpacity>
       </View>
       {error ? <Text style={styles.error}>{error}</Text> : null}
@@ -169,4 +163,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SignUpPage;
+export default SignUpScreen;

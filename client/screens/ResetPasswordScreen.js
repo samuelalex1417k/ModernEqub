@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; // Import Ionicons from expo vector icons
 
-const ResetPasswordPage = ({ navigation }) => {
+const ResetPasswordScreen = ({ navigation }) => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isPasswordValid, setIsPasswordValid] = useState(false);
@@ -10,32 +10,28 @@ const ResetPasswordPage = ({ navigation }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
 
-  // Validate password
   const validatePassword = (text) => {
     const trimmedText = text.trim();
     setPassword(trimmedText);
-    setIsPasswordValid(trimmedText.length >= 8); // Check if password is not empty
+    setIsPasswordValid(trimmedText.length >= 8);
   };
 
-  // Validate confirm password
   const validateConfirmPassword = (text) => {
     const trimmedText = text.trim();
     setConfirmPassword(trimmedText);
-    setIsConfirmPasswordValid(trimmedText.length >= 8); // Check if confirm password is not empty
+    setIsConfirmPasswordValid(trimmedText.length >= 8);
   };
 
-  // Reset password logic
   const handleResetPassword = () => {
     if (password !== confirmPassword) {
       setError('Passwords do not match');
     } else {
       setError('');
       console.log('Resetting password...');
-      navigation.navigate('Login'); // Navigate to login page after resetting password
+      navigation.navigate('Login');
     }
   };
 
-  // Handle navigation to login page
   const handleLoginRedirect = () => {
     navigation.navigate('Login');
   };
@@ -144,4 +140,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ResetPasswordPage;
+export default ResetPasswordScreen;

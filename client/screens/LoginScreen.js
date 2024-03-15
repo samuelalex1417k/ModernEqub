@@ -3,61 +3,51 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, BackHandler } from
 import PhoneNumberInput from 'react-native-phone-number-input';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-const LoginPage = ({ navigation }) => {
+const LoginScreen = ({ navigation }) => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
   const [isPhoneNumberValid, setIsPhoneNumberValid] = useState(false);
   const [isPasswordValid, setIsPasswordValid] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  // Validate phone number
   const validatePhoneNumber = (text) => {
     const trimmedText = text.trim();
     setPhoneNumber(trimmedText);
     setIsPhoneNumberValid(trimmedText.length > 0);
   };
 
-  // Validate password
   const validatePassword = (text) => {
     const trimmedText = text.trim();
     setPassword(trimmedText);
-    setIsPasswordValid(trimmedText.length >= 8); // Adjust validation for minimum password length
+    setIsPasswordValid(trimmedText.length >= 8);
   };
 
   // Check if both inputs are valid to enable the login button
   const isLoginEnabled = isPhoneNumberValid && isPasswordValid;
 
-  // Handle login button press
   const handleLogin = () => {
-    // Handle login logic here
     navigation.navigate('HomePage');
   };
 
-  // Handle sign up button press
   const handleSignUp = () => {
-    // Navigate to Signup page
     navigation.navigate('SignUp');
   };
 
-  // Handle forgot password button press
   const handleForgotPassword = () => {
-    // Handle forgot password logic here
     navigation.navigate('OTP');
   };
 
-  // Handle back button press
   const handleBackButton = () => {
-    navigation.goBack(); // Go back to the previous screen
-    return true; // Prevent default behavior
+    navigation.goBack();
+    return true;
   };
 
   useEffect(() => {
     // Register the back button handler when the login page is focused
     const backHandler = BackHandler.addEventListener('hardwareBackPress', handleBackButton);
 
-    // Remove the back button handler when navigating away from the login page
     return () => backHandler.remove();
-  }, []); // Empty dependency array to ensure the effect runs only once
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -81,7 +71,7 @@ const LoginPage = ({ navigation }) => {
           secureTextEntry={!showPassword}
         />
         <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-          <Icon name={showPassword ? 'eye-slash' : 'eye'} size={20} color="#000" />
+          <Icon name={showPassword ? 'eye' : 'eye-slash'} size={20} color="#000" />
         </TouchableOpacity>
       </View>
 
@@ -163,4 +153,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginPage;
+export default LoginScreen;

@@ -1,24 +1,20 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import PhoneNumberInput from 'react-native-phone-number-input';
 
-const ForgetPasswordPage = ({ navigation }) => {
+const ForgotPasswordScreen = ({ navigation }) => {
   const [phoneNumber, setPhoneNumber] = useState('');
   
-
   const handleSendOtp = () => {
-    // Validate phone number and navigate to OTPInputPage
     if (phoneNumber.trim() !== '') {
         navigation.navigate('OTP');
-    } else {
-      // Handle empty phone number
     }
   };
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Enter Your Phone Number</Text>
       <PhoneNumberInput
-        defaultValue={''} // Set defaultValue to an empty string
+        defaultValue={''}
         defaultCode="ET"
         onChangeText={(text) => {
             if (text.replace(/\D/g, '').length <= 9) {
@@ -66,4 +62,5 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
-export default ForgetPasswordPage;
+
+export default ForgotPasswordScreen;

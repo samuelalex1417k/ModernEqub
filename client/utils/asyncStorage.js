@@ -6,7 +6,7 @@ export const setItem = async (key, value) => {
   } catch (error) {
     console.log('Error storing value: ', error);
   }
-};
+}
 
 
 export const getItem = async (key) => {
@@ -16,7 +16,7 @@ export const getItem = async (key) => {
     } catch (error) {
       console.log('Error retrieving value: ', error);
     }
-};
+}
 
 export const removeItem = async (key) =>{
     try {

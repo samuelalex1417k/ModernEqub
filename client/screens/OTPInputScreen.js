@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 
-const OTPInputPage = ({ navigation }) => {
+const OTPInputScreen = ({ navigation }) => {
   const [otp, setOtp] = useState('');
-  const [resendTimer, setResendTimer] = useState(120); // Initial time in seconds
+  const [resendTimer, setResendTimer] = useState(120);
   const [isContinueEnabled, setIsContinueEnabled] = useState(false);
   const [isResendPressed, setIsResendPressed] = useState(false);
 
@@ -31,7 +31,7 @@ const OTPInputPage = ({ navigation }) => {
 
   const handleResendCode = () => {
     // Resend OTP logic here
-    setResendTimer(120); // Reset timer
+    setResendTimer(120);
     setIsResendPressed(true);
   };
 
@@ -126,4 +126,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default OTPInputPage;
+export default OTPInputScreen;
